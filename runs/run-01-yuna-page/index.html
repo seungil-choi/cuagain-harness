@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex" />
+<title>연아의 소개 · 연아 아빠에게 메시지 남기기</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet" />
+<style>
+  /* ── design.md 토큰 ── */
+  :root{
+    --bg:#FFFDF7; --surface:#FFFFFF; --ink:#2E2A24; --ink-muted:#7C756B;
+    --primary:#F28C4B; --primary-ink:#FFFFFF; --line:#ECE4D8;
+    --danger:#D64545; --ok:#3F9D6D;
+    --r-btn:12px; --r-input:12px; --r-card:16px;
+    --f-body:"Pretendard",-apple-system,BlinkMacSystemFont,"Noto Sans KR","Malgun Gothic",sans-serif;
+    --f-hand:"Nanum Pen Script",var(--f-body);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--bg); color:var(--ink); font-family:var(--f-body);
+    font-size:16px; line-height:1.6; -webkit-text-size-adjust:100%;
+  }
+  .wrap{max-width:420px; margin:0 auto; padding:16px 16px 40px}
+  /* 헤더 */
+  .topbar{display:flex; align-items:center; gap:8px; padding:8px 2px 16px; color:var(--ink-muted); font-size:13px}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--primary)}
+  /* 카드 */
+  .card{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-card);
+        box-shadow:0 1px 3px rgba(0,0,0,.06); padding:20px 16px; margin-bottom:16px}
+  /* 소개 */
+  .intro{text-align:center}
+  .avatar{width:120px;height:120px;border-radius:50%;margin:4px auto 12px;
+          background:radial-gradient(circle at 50% 38%, #FFE3C7, #F7C79A);
+          display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .avatar svg{width:88px;height:88px}
+  .name{font-family:var(--f-hand); font-size:40px; line-height:1; color:var(--ink); margin:2px 0 6px}
+  .intro-text{color:var(--ink-muted); font-size:15px; margin:0 6px}
+  .guide{margin:16px 6px 0; padding:12px 14px; background:#FFF6EC; border:1px solid #F6E2CC;
+         border-radius:12px; font-size:14px; color:#6B4A2A; text-align:left}
+  .guide b{color:#A85B20}
+  /* 폼 */
+  h2.sec{font-size:16px; margin:0 0 4px}
+  .sub{color:var(--ink-muted); font-size:13px; margin:0 0 16px}
+  .field{margin-bottom:16px}
+  label.lbl{display:block; font-size:14px; font-weight:600; margin-bottom:8px}
+  .req{color:var(--primary); margin-left:2px}
+  input[type=text],input[type=tel],input[type=email],input[type=date],textarea,select{
+    width:100%; min-height:48px; padding:12px 14px; font-size:16px; font-family:inherit;
+    color:var(--ink); background:var(--surface); border:1px solid var(--line);
+    border-radius:var(--r-input); -webkit-appearance:none; appearance:none;
+  }
+  textarea{min-height:104px; resize:vertical; line-height:1.5}
+  input:focus,textarea:focus,select:focus{outline:none; border-color:var(--primary);
+    box-shadow:0 0 0 3px rgba(242,140,75,.25)}
+  .hint{font-size:12px; color:var(--ink-muted); margin-top:6px}
+  .err{display:none; font-size:13px; color:var(--danger); margin-top:6px}
+  .err::before{content:"⚠ "}
+  .field.invalid input,.field.invalid textarea{border-color:var(--danger)}
+  .field.invalid .err{display:block}
+  /* 라디오(목적·회신수단) */
+  fieldset{border:0; margin:0; padding:0}
+  legend{font-size:14px; font-weight:600; margin-bottom:8px; padding:0}
+  .opts{display:flex; flex-wrap:wrap; gap:8px}
+  .opt{flex:1 1 30%; min-width:92px}
+  .opt input{position:absolute; opacity:0; width:1px; height:1px}
+  .opt label{display:flex; align-items:center; justify-content:center; gap:6px;
+    min-height:44px; padding:8px 10px; border:1px solid var(--line); border-radius:12px;
+    font-size:14px; cursor:pointer; background:var(--surface); text-align:center}
+  .opt input:checked + label{border-color:var(--primary); background:#FFF3E8; font-weight:600}
+  .opt input:checked + label::before{content:"✓"; color:var(--primary); font-weight:700}
+  .opt input:focus-visible + label{box-shadow:0 0 0 3px rgba(242,140,75,.25)}
+  /* 동의 */
+  .agree{display:flex; gap:10px; align-items:flex-start; padding:12px 14px;
+    border:1px solid var(--line); border-radius:12px; background:#FBF8F2}
+  .agree input{width:22px;height:22px;margin-top:1px;accent-color:var(--primary)}
+  .agree label{font-size:14px}
+  .agree a{color:var(--primary)}
+  /* 버튼 */
+  .btn{width:100%; min-height:52px; border:0; border-radius:var(--r-btn);
+    background:var(--primary); color:var(--primary-ink); font-size:16px; font-weight:700;
+    font-family:inherit; cursor:pointer; margin-top:4px}
+  .btn:focus-visible{outline:3px solid rgba(242,140,75,.45); outline-offset:2px}
+  .btn:active{transform:translateY(1px)}
+  .foot{margin-top:18px; text-align:center; font-size:12px; color:var(--ink-muted)}
+  .foot a{color:var(--ink-muted)}
+  .caretip{margin-top:8px; font-size:12px; color:var(--ink-muted)}
+  /* 접수 완료 */
+  .done{text-align:center; padding:28px 18px}
+  .done .check{width:64px;height:64px;border-radius:50%;background:#EAF6EF;color:var(--ok);
+    display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 14px}
+  .done h2{margin:0 0 8px; font-size:20px}
+  .done p{margin:0 0 6px; color:var(--ink-muted); font-size:15px}
+  [hidden]{display:none !important}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="topbar"><span class="dot" aria-hidden="true"></span><span>yuna.page · 연아 아빠가 확인해요</span></div>
+
+  <!-- ① 소개 -->
+  <section class="card intro" aria-labelledby="who">
+    <div class="avatar" role="img" aria-label="연아 그림">
+      <!-- 사진 없이 그림만으로도 성립 (PRD §4.1). 실제 사진/그림 준비되면 교체 -->
+      <svg viewBox="0 0 88 88" aria-hidden="true">
+        <circle cx="44" cy="40" r="26" fill="#FFFFFF"/>
+        <circle cx="35" cy="38" r="3.4" fill="#5B4636"/><circle cx="53" cy="38" r="3.4" fill="#5B4636"/>
+        <path d="M34 50 q10 9 20 0" stroke="#E0885A" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <path d="M22 30 q22 -20 44 0" stroke="#7A5B43" stroke-width="7" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h1 id="who" class="name">연아</h1>
+    <p class="intro-text">(연아가 직접 고른 소개 한 줄이 들어가요)</p>
+    <div class="guide">안녕하세요, <b>연아 아빠</b>예요. 아이들이 다시 만나 놀 수 있도록, 아래에 메시지를 남겨주세요. 남겨주신 연락처로 제가 직접 확인하고 연락드릴게요.</div>
+  </section>
+
+  <!-- ② 요청 폼 -->
+  <form class="card" id="reqForm" novalidate aria-labelledby="formTitle">
+    <h2 class="sec" id="formTitle">연아 아빠에게 메시지 남기기</h2>
+    <p class="sub">가입 없이 바로 남길 수 있어요. 2분이면 충분해요.</p>
+
+    <div class="field" id="f-name">
+      <label class="lbl" for="friend">아이(친구) 이름<span class="req" aria-hidden="true">*</span></label>
+      <input id="friend" name="friend" type="text" maxlength="30" required
+             inputmode="text" autocomplete="off" placeholder="아이 이름이나 부르는 이름을 적어주세요" />
+      <p class="err" id="e-name">아이 이름을 적어주세요.</p>
+    </div>
+
+    <fieldset class="field">
+      <legend>요청 목적<span class="req" aria-hidden="true">*</span></legend>
+      <div class="opts">
+        <span class="opt"><input type="radio" id="p1" name="purpose" value="play" checked><label for="p1">함께 놀기</label></span>
+        <span class="opt"><input type="radio" id="p2" name="purpose" value="invite"><label for="p2">초대하기</label></span>
+        <span class="opt"><input type="radio" id="p3" name="purpose" value="hello"><label for="p3">인사·기타</label></span>
+      </div>
+    </fieldset>
+
+    <div class="field" id="f-msg">
+      <label class="lbl" for="msg">전할 말<span class="req" aria-hidden="true">*</span></label>
+      <textarea id="msg" name="msg" maxlength="1000" required
+                placeholder="예) 저희 아이가 연아랑 또 놀고 싶어 해요. 괜찮으시면 한번 뵐 수 있을까요?"></textarea>
+      <p class="err" id="e-msg">전할 말을 적어주세요.</p>
+    </div>
+
+    <div class="field">
+      <label class="lbl" for="wday">희망 일정 <span class="hint" style="font-weight:400">(선택)</span></label>
+      <input id="wday" name="wday" type="date" />
+      <div class="opts" style="margin-top:8px" role="group" aria-label="희망 시간대">
+        <span class="opt"><input type="radio" id="t0" name="wtime" value="any" checked><label for="t0">상관없음</label></span>
+        <span class="opt"><input type="radio" id="t1" name="wtime" value="am"><label for="t1">오전</label></span>
+        <span class="opt"><input type="radio" id="t2" name="wtime" value="pm"><label for="t2">오후</label></span>
+        <span class="opt"><input type="radio" id="t3" name="wtime" value="eve"><label for="t3">저녁</label></span>
+      </div>
+      <p class="hint">정확한 시각·장소는 연락으로 함께 정할게요. 확정 예약은 아니에요.</p>
+    </div>
+
+    <fieldset class="field" id="f-channel">
+      <legend>회신 받을 방법<span class="req" aria-hidden="true">*</span></legend>
+      <div class="opts">
+        <span class="opt"><input type="radio" id="c1" name="channel" value="sms"><label for="c1">문자</label></span>
+        <span class="opt"><input type="radio" id="c2" name="channel" value="tel"><label for="c2">전화</label></span>
+        <span class="opt"><input type="radio" id="c3" name="channel" value="email"><label for="c3">이메일</label></span>
+      </div>
+      <p class="err" id="e-channel">회신 방법을 하나 골라주세요.</p>
+    </fieldset>
+
+    <div class="field" id="f-contact" hidden>
+      <label class="lbl" for="contact"><span id="contact-label">연락처</span><span class="req" aria-hidden="true">*</span></label>
+      <input id="contact" name="contact" type="tel" inputmode="tel" autocomplete="off" />
+      <p class="caretip">연락처 입력은 보호자와 함께 해주세요.</p>
+      <p class="err" id="e-contact">연락처를 확인해주세요.</p>
+    </div>
+
+    <div class="field">
+      <label class="lbl" for="free">연락받기 편한 시간 <span class="hint" style="font-weight:400">(선택)</span></label>
+      <input id="free" name="free" type="text" maxlength="100" placeholder="예) 평일 저녁 7시 이후" />
+    </div>
+
+    <div class="field agree" id="f-agree">
+      <input id="agree" name="agree" type="checkbox" required />
+      <label for="agree">입력하신 정보는 <b>연아 아빠에게 전달</b>되며, 연락·만남 조율 목적에만 쓰고 접수 후 90일에 자동 삭제돼요. <a href="/privacy">정보 처리 안내</a></label>
+    </div>
+    <p class="err" id="e-agree" style="margin:-8px 0 12px">동의가 필요해요.</p>
+
+    <button class="btn" type="submit">연아 아빠에게 보내기</button>
+    <p class="foot">이 페이지는 연아 명함의 QR로 연결돼요. 다른 사람의 메시지나 연락처는 보이지 않아요.</p>
+  </form>
+
+  <!-- ③ 접수 완료 (제출 성공 후 표시) -->
+  <section class="card done" id="doneCard" hidden aria-live="polite">
+    <div class="check" aria-hidden="true">✓</div>
+    <h2>연아 아빠에게 전달됐어요</h2>
+    <p>남겨주신 연락처로 확인 후 연락드릴게요.</p>
+    <p id="doneSchedule" hidden>희망 일정은 아직 확정되지 않았어요. 연락으로 함께 정할게요.</p>
+  </section>
+</main>
+
+<script>
+  // 회신 수단 선택 → 맞는 연락처 필드만 노출 (숨겨진 값은 제출 안 함) · design.md/CLAUDE.md
+  var channelInputs = document.querySelectorAll('input[name=channel]');
+  var fContact = document.getElementById('f-contact');
+  var contact = document.getElementById('contact');
+  var contactLabel = document.getElementById('contact-label');
+  channelInputs.forEach(function(r){
+    r.addEventListener('change', function(){
+      fContact.hidden = false;
+      if(this.value==='email'){ contact.type='email'; contact.inputMode='email'; contactLabel.textContent='이메일 주소'; }
+      else { contact.type='tel'; contact.inputMode='tel'; contactLabel.textContent= this.value==='tel' ? '전화번호' : '문자 받을 번호'; }
+      contact.value=''; // 수단 바꾸면 연락처만 초기화(본문·일정 유지)
+    });
+  });
+
+  // 간단 검증(데모) — 실제 저장/전송은 서버가 담당(PRD §6,§9)
+  function invalid(id,on){ document.getElementById(id).classList.toggle('invalid', on); }
+  document.getElementById('reqForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var ok=true, firstBad=null;
+    var name=document.getElementById('friend').value.trim();
+    var msg=document.getElementById('msg').value.trim();
+    var ch=document.querySelector('input[name=channel]:checked');
+    var ct=document.getElementById('contact').value.trim();
+    var ag=document.getElementById('agree').checked;
+    invalid('f-name',!name); if(!name){ok=false;firstBad=firstBad||'friend';}
+    invalid('f-msg',!msg); if(!msg){ok=false;firstBad=firstBad||'msg';}
+    invalid('f-channel',!ch); if(!ch){ok=false;}
+    var ctBad = !ch || !ct; invalid('f-contact',ctBad && !!ch); if(ctBad){ok=false; if(ch&&!firstBad)firstBad='contact';}
+    invalid('f-agree',!ag); document.getElementById('e-agree').style.display = ag?'none':'block';
+    if(!ag) ok=false;
+    if(!ok){ if(firstBad) document.getElementById(firstBad).focus(); return; }
+    // 성공: 저장 성공 후에만 완료 표시(데모) — 폼 숨기고 완료 카드
+    document.getElementById('reqForm').hidden=true;
+    var d=document.getElementById('doneCard'); d.hidden=false;
+    if(document.getElementById('wday').value) document.getElementById('doneSchedule').hidden=false;
+    d.scrollIntoView({behavior:'smooth'});
+  });
+</script>
+</body>
+</html>
