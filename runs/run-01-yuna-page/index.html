@@ -1,240 +1,283 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="robots" content="noindex" />
-<title>연아의 소개 · 연아 아빠에게 메시지 남기기</title>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="theme-color" content="#f7f4f1" />
+<title>연아 · My Name is Yuna (하네스 산출물 · 자리표시자)</title>
+<!-- ⚠️ 하네스 산출물: 실제 yuna.page 디자인 시스템을 그대로 가져오되,
+     연아 실제 사진·소개·장래희망은 공개 저장소라 전부 자리표시자로 둠. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet" />
 <style>
-  /* ── design.md 토큰 ── */
   :root{
-    --bg:#FFFDF7; --surface:#FFFFFF; --ink:#2E2A24; --ink-muted:#7C756B;
-    --primary:#F28C4B; --primary-ink:#FFFFFF; --line:#ECE4D8;
-    --danger:#D64545; --ok:#3F9D6D;
-    --r-btn:12px; --r-input:12px; --r-card:16px;
-    --f-body:"Pretendard",-apple-system,BlinkMacSystemFont,"Noto Sans KR","Malgun Gothic",sans-serif;
+    --paper:#f7f4f1; --white:#fff; --ink:#1d1b20; --ink-2:#4a4650; --ink-3:#6f6a74;
+    --line:#e4dde6; --field:#fff; --tint:#fbf3f7;
+    --blush:#e9b8c6; --mist:#b5d3e6;
+    --grad:linear-gradient(90deg,#e2a3b8,#9cc6e2);
+    --grad-v:linear-gradient(180deg,#e2a3b8,#9cc6e2);
+    --grad-focus:linear-gradient(120deg,#cf7a96,#6fa3c9);
+    --error:#b3261e; --focus:#4d84b8; --radius:14px;
+    --ease:cubic-bezier(.2,.8,.2,1); color-scheme:light;
+    --f-body:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
     --f-hand:"Nanum Pen Script",var(--f-body);
   }
   *{box-sizing:border-box}
-  html,body{margin:0}
-  body{
-    background:var(--bg); color:var(--ink); font-family:var(--f-body);
-    font-size:16px; line-height:1.6; -webkit-text-size-adjust:100%;
-  }
-  .wrap{max-width:420px; margin:0 auto; padding:16px 16px 40px}
-  /* 헤더 */
-  .topbar{display:flex; align-items:center; gap:8px; padding:8px 2px 16px; color:var(--ink-muted); font-size:13px}
-  .dot{width:8px;height:8px;border-radius:50%;background:var(--primary)}
-  /* 카드 */
-  .card{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-card);
-        box-shadow:0 1px 3px rgba(0,0,0,.06); padding:20px 16px; margin-bottom:16px}
-  /* 소개 */
-  .intro{text-align:center}
-  .avatar{width:120px;height:120px;border-radius:50%;margin:4px auto 12px;
-          background:radial-gradient(circle at 50% 38%, #FFE3C7, #F7C79A);
-          display:flex;align-items:center;justify-content:center;overflow:hidden}
-  .avatar svg{width:88px;height:88px}
-  .name{font-family:var(--f-hand); font-size:40px; line-height:1; color:var(--ink); margin:2px 0 6px}
-  .intro-text{color:var(--ink-muted); font-size:15px; margin:0 6px}
-  .guide{margin:16px 6px 0; padding:12px 14px; background:#FFF6EC; border:1px solid #F6E2CC;
-         border-radius:12px; font-size:14px; color:#6B4A2A; text-align:left}
-  .guide b{color:#A85B20}
-  /* 폼 */
-  h2.sec{font-size:16px; margin:0 0 4px}
-  .sub{color:var(--ink-muted); font-size:13px; margin:0 0 16px}
-  .field{margin-bottom:16px}
-  label.lbl{display:block; font-size:14px; font-weight:600; margin-bottom:8px}
-  .req{color:var(--primary); margin-left:2px}
-  input[type=text],input[type=tel],input[type=email],input[type=date],textarea,select{
-    width:100%; min-height:48px; padding:12px 14px; font-size:16px; font-family:inherit;
-    color:var(--ink); background:var(--surface); border:1px solid var(--line);
-    border-radius:var(--r-input); -webkit-appearance:none; appearance:none;
-  }
-  textarea{min-height:104px; resize:vertical; line-height:1.5}
-  input:focus,textarea:focus,select:focus{outline:none; border-color:var(--primary);
-    box-shadow:0 0 0 3px rgba(242,140,75,.25)}
-  .hint{font-size:12px; color:var(--ink-muted); margin-top:6px}
-  .err{display:none; font-size:13px; color:var(--danger); margin-top:6px}
-  .err::before{content:"⚠ "}
-  .field.invalid input,.field.invalid textarea{border-color:var(--danger)}
-  .field.invalid .err{display:block}
-  /* 라디오(목적·회신수단) */
-  fieldset{border:0; margin:0; padding:0}
-  legend{font-size:14px; font-weight:600; margin-bottom:8px; padding:0}
-  .opts{display:flex; flex-wrap:wrap; gap:8px}
-  .opt{flex:1 1 30%; min-width:92px}
-  .opt input{position:absolute; opacity:0; width:1px; height:1px}
-  .opt label{display:flex; align-items:center; justify-content:center; gap:6px;
-    min-height:44px; padding:8px 10px; border:1px solid var(--line); border-radius:12px;
-    font-size:14px; cursor:pointer; background:var(--surface); text-align:center}
-  .opt input:checked + label{border-color:var(--primary); background:#FFF3E8; font-weight:600}
-  .opt input:checked + label::before{content:"✓"; color:var(--primary); font-weight:700}
-  .opt input:focus-visible + label{box-shadow:0 0 0 3px rgba(242,140,75,.25)}
-  /* 동의 */
-  .agree{display:flex; gap:10px; align-items:flex-start; padding:12px 14px;
-    border:1px solid var(--line); border-radius:12px; background:#FBF8F2}
-  .agree input{width:22px;height:22px;margin-top:1px;accent-color:var(--primary)}
-  .agree label{font-size:14px}
-  .agree a{color:var(--primary)}
-  /* 버튼 */
-  .btn{width:100%; min-height:52px; border:0; border-radius:var(--r-btn);
-    background:var(--primary); color:var(--primary-ink); font-size:16px; font-weight:700;
-    font-family:inherit; cursor:pointer; margin-top:4px}
-  .btn:focus-visible{outline:3px solid rgba(242,140,75,.45); outline-offset:2px}
-  .btn:active{transform:translateY(1px)}
-  .foot{margin-top:18px; text-align:center; font-size:12px; color:var(--ink-muted)}
-  .foot a{color:var(--ink-muted)}
-  .caretip{margin-top:8px; font-size:12px; color:var(--ink-muted)}
-  /* 접수 완료 */
-  .done{text-align:center; padding:28px 18px}
-  .done .check{width:64px;height:64px;border-radius:50%;background:#EAF6EF;color:var(--ok);
-    display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 14px}
-  .done h2{margin:0 0 8px; font-size:20px}
-  .done p{margin:0 0 6px; color:var(--ink-muted); font-size:15px}
-  [hidden]{display:none !important}
+  body{margin:0;background:linear-gradient(120deg,#f4dce5 0%,#ece3ee 50%,#d9e9f3 100%) fixed;
+    color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;letter-spacing:-.01em;word-break:keep-all;-webkit-font-smoothing:antialiased}
+  .page{max-width:520px;margin:0 auto;min-height:100vh;background:var(--paper);
+    padding:0 0 calc(120px + env(safe-area-inset-bottom))}
+  @media(min-width:560px){.page{box-shadow:0 0 60px rgba(120,100,150,.12)}}
+
+  /* 히어로: 사진(자리표시자) + 크레용 낙서 + 손글씨 */
+  .hero{position:relative;aspect-ratio:3/4;overflow:hidden;background:linear-gradient(160deg,var(--blush),var(--mist))}
+  .hero-photo{position:absolute;inset:0;display:grid;place-items:center;color:rgba(255,255,255,.9);
+    font-size:14px;letter-spacing:.02em;background:linear-gradient(160deg,var(--blush),var(--mist))}
+  .doodles{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+  .hero-type{position:absolute;left:5%;top:3%;margin:0;transform:rotate(-7deg);
+    font-family:var(--f-hand);font-size:46px;line-height:.98;color:var(--ink)}
+  .hero-type small{display:block;font-size:26px;opacity:.8}
+
+  .block{padding:40px 24px 0}
+  .block + .block{margin-top:8px}
+  .label{margin:0 0 14px;font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+  .label-row{display:flex;justify-content:space-between;align-items:baseline}
+  .label-meta{font-size:13px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+  .name{display:inline-block;margin:0 0 22px;font-size:44px;line-height:1.1;font-weight:700;letter-spacing:-.04em}
+  .name-en{margin-left:4px;font-size:22px;font-weight:500;letter-spacing:.02em;color:var(--ink-3);vertical-align:4px}
+  .name::after{content:"";display:block;width:100%;height:3px;margin-top:12px;border-radius:2px;background:var(--grad)}
+  .body-text{margin:0;font-size:17px;line-height:1.75;color:var(--ink-2)}
+  .ph{color:var(--ink-3);font-style:normal}
+  .dream-text{position:relative;margin:0;padding-left:16px;font-size:clamp(18px,5.6vw,22px);line-height:1.45;font-weight:600;letter-spacing:-.03em}
+  .dream-text::before{content:"";position:absolute;left:0;top:.15em;bottom:.15em;width:2px;border-radius:1px;background:var(--grad-v)}
+
+  /* 갤러리: 9장 + 더보기 (실제 사진 대신 자리표시자 타일) */
+  .gallery{padding-left:0;padding-right:0}
+  .gallery .label-row{padding:0 24px}
+  .gallery-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+  .photo{display:block;width:100%;aspect-ratio:1;border:0;background:var(--tint)}
+  .ph-tile{background:linear-gradient(135deg,var(--blush),var(--mist))}
+  .gallery-grid li:nth-child(3n+2) .ph-tile{background:linear-gradient(135deg,#f3d9c6,#cdb8e4)}
+  .gallery-grid li:nth-child(3n) .ph-tile{background:linear-gradient(135deg,#c9e2cf,#b5d3e6)}
+  .more-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;min-height:52px;margin-top:4px;
+    border:0;background:none;cursor:pointer;font:inherit;font-size:15px;font-weight:600;color:var(--ink-2)}
+  .more-btn::after{content:"";width:7px;height:7px;margin-top:-3px;border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;transform:rotate(45deg);transition:transform .2s}
+  .more-btn[aria-expanded="true"]::after{transform:rotate(-135deg);margin-top:3px}
+
+  /* 토글 BGM (자동재생 아님 · 오디오는 자리표시자) */
+  .bgm-btn{position:fixed;z-index:11;top:calc(12px + env(safe-area-inset-top));right:max(12px,calc(50% - 260px + 12px));
+    display:grid;place-items:center;width:40px;height:40px;border:0;border-radius:50%;
+    background:rgba(255,255,255,.78);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+    box-shadow:0 2px 10px rgba(29,27,32,.12);color:var(--ink);cursor:pointer}
+  .bgm-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .bgm-btn .ic-on{display:none}
+  .bgm-btn[aria-pressed="true"] .ic-on{display:block}
+  .bgm-btn[aria-pressed="true"] .ic-off{display:none}
+
+  /* 하단 고정 CTA */
+  .cta-bar{position:fixed;left:50%;bottom:0;z-index:10;width:100%;max-width:520px;transform:translateX(-50%);
+    padding:16px 20px calc(16px + env(safe-area-inset-bottom));background:linear-gradient(to top,var(--paper) 55%,rgba(247,244,241,0))}
+  .btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:56px;padding:0 20px;border:0;border-radius:14px;
+    background:var(--ink);color:#fff;font:inherit;font-size:16px;font-weight:600;letter-spacing:-.01em;cursor:pointer;transition:transform .12s var(--ease)}
+  .btn:active{transform:scale(.985)}
+  .btn-send{color:#f4c6d4}
+  .btn-ghost{background:var(--tint);color:var(--ink)}
+  .cta-bar .btn{max-width:480px;margin:0 auto}
+  .icon-btn{display:grid;place-items:center;width:44px;height:44px;border:0;border-radius:50%;background:none;color:var(--ink);cursor:pointer}
+  .icon-btn svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+  /* 바텀시트 폼 (간소화: 3필드) */
+  .sheet{width:100%;max-width:520px;max-height:92dvh;margin:auto auto 0;padding:10px 24px calc(20px + env(safe-area-inset-bottom));
+    border:0;border-radius:24px 24px 0 0;background:var(--white);color:var(--ink);box-shadow:0 -12px 40px rgba(29,27,32,.1);overflow-y:auto}
+  .sheet::backdrop{background:rgba(29,27,32,.28)}
+  .sheet-grip{width:40px;height:4px;margin:0 auto 10px;border-radius:2px;background:var(--grad)}
+  .sheet-head{position:relative;display:flex;align-items:center;justify-content:space-between;margin:0 -10px 4px 0}
+  .sheet-title{display:flex;align-items:center;gap:2px}
+  .sheet-head h2{margin:0;font-size:20px;font-weight:700;letter-spacing:-.03em}
+  .info-chip{display:grid;place-items:center;width:40px;height:40px;border:0;border-radius:50%;background:none;color:var(--ink-3);cursor:pointer}
+  .info-chip svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round}
+  .info-chip .dot{fill:currentColor;stroke:none}
+  .info-pop{position:absolute;z-index:5;top:calc(100% + 4px);left:0;right:10px;padding:16px 18px;border-radius:14px;background:var(--ink);color:#fff;box-shadow:0 12px 32px rgba(29,27,32,.25)}
+  .info-pop dl{margin:0;display:grid;gap:12px}
+  .info-pop dt{font-size:13px;font-weight:700;color:#fff}
+  .info-pop dd{margin:2px 0 0;font-size:14px;line-height:1.55;color:rgba(255,255,255,.82)}
+  .sheet-lead{margin:0 0 22px;font-size:15px;line-height:1.6;color:var(--ink-2)}
+  .field{margin:0 0 20px}
+  .field > label,.field-label-row label{display:block;margin-bottom:8px;font-size:15px;font-weight:600;color:var(--ink)}
+  .field-label-row{display:flex;justify-content:space-between;align-items:baseline}
+  .counter{font-size:13px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+  input[type=text],input[type=tel],textarea{width:100%;min-height:52px;padding:14px 16px;font:inherit;font-size:16px;color:var(--ink);
+    background:var(--field);border:1.5px solid var(--line);border-radius:12px;-webkit-appearance:none;appearance:none;transition:border-color .15s}
+  textarea{resize:none;min-height:132px;line-height:1.6}
+  input:focus,textarea:focus{outline:none;border-color:transparent;
+    background:linear-gradient(#fff,#fff) padding-box,var(--grad-focus) border-box;
+    box-shadow:-3px 0 10px rgba(226,163,184,.25),3px 0 10px rgba(156,198,226,.3)}
+  ::placeholder{color:#8a8590}
+  .hint{margin:8px 0 0;font-size:14px;color:var(--ink-3)}
+  .error{margin:8px 0 0;font-size:14px;font-weight:600;color:var(--error)}
+  .error:empty{display:none}
+  .field.invalid input,.field.invalid textarea{border-color:var(--error)}
+  .sheet-done{padding:28px 0 4px;text-align:center}
+  .sheet-done h3{margin:0 0 6px;font-size:20px;letter-spacing:-.03em}
+  .sheet-done p{margin:0 0 28px;color:var(--ink-2);font-size:15px}
+  button:focus-visible,a:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
+  [hidden]{display:none!important}
 </style>
 </head>
-<body>
-<main class="wrap">
-  <div class="topbar"><span class="dot" aria-hidden="true"></span><span>yuna.page · 연아 아빠가 확인해요</span></div>
+<body class="card-page">
+<main class="page">
+  <header class="hero">
+    <div class="hero-photo">(연아 사진 자리표시자)</div>
+    <!-- 크레용 낙서 (실제 yuna.page에서 가져옴 · 개인정보 아님) -->
+    <svg class="doodles" viewBox="0 0 300 400" aria-hidden="true">
+      <defs><filter id="crayon" x="-20%" y="-20%" width="140%" height="140%">
+        <feTurbulence type="fractalNoise" baseFrequency="1.2" numOctaves="2" seed="7" result="n"/>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="1.8"/></filter></defs>
+      <g filter="url(#crayon)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <g transform="translate(222 128) rotate(14)" stroke="#f3c445" stroke-width="2.6">
+          <path d="M-17 9 L-20 -9 L-9 0 L0 -13 L9 0 L20 -9 L17 9 Q0 13 -17 9"/></g>
+        <g transform="translate(38 168)" stroke="#7cbfe8" stroke-width="2.4">
+          <path d="M0 -12 Q1.5 -1.5 12 0 Q1.5 1.5 0 12 Q-1.5 1.5 -12 0 Q-1.5 -1.5 0 -12 Z"/></g>
+        <g transform="translate(262 196) rotate(-10)" stroke="#f3c445" stroke-width="2.6">
+          <path d="M15 -2 A15 15 0 1 1 11 -10"/><path d="M-5 -6 v4 M5 -6 v4"/><path d="M-8 4 Q0 12 8 4"/></g>
+        <g transform="translate(246 372) rotate(-12)" stroke="#ef8fb3" stroke-width="2.4">
+          <path d="M0 6 C-12 -2 -8 -12 0 -5 C8 -12 12 -2 0 6 Z"/></g>
+      </g>
+    </svg>
+    <p class="hero-type"><small>My Name is</small>YUNA</p>
+  </header>
 
-  <!-- ① 소개 -->
-  <section class="card intro" aria-labelledby="who">
-    <div class="avatar" role="img" aria-label="연아 그림">
-      <!-- 사진 없이 그림만으로도 성립 (PRD §4.1). 실제 사진/그림 준비되면 교체 -->
-      <svg viewBox="0 0 88 88" aria-hidden="true">
-        <circle cx="44" cy="40" r="26" fill="#FFFFFF"/>
-        <circle cx="35" cy="38" r="3.4" fill="#5B4636"/><circle cx="53" cy="38" r="3.4" fill="#5B4636"/>
-        <path d="M34 50 q10 9 20 0" stroke="#E0885A" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-        <path d="M22 30 q22 -20 44 0" stroke="#7A5B43" stroke-width="7" fill="none" stroke-linecap="round"/>
-      </svg>
-    </div>
-    <h1 id="who" class="name">연아</h1>
-    <p class="intro-text">(연아가 직접 고른 소개 한 줄이 들어가요)</p>
-    <div class="guide">안녕하세요, <b>연아 아빠</b>예요. 아이들이 다시 만나 놀 수 있도록, 아래에 메시지를 남겨주세요. 남겨주신 연락처로 제가 직접 확인하고 연락드릴게요.</div>
+  <section class="block intro">
+    <p class="label">About</p>
+    <h1 class="name">연아<span class="name-en">(YUNA)</span></h1>
+    <p class="body-text ph">(연아가 직접 고른 소개 문구가 들어가요)</p>
   </section>
 
-  <!-- ② 요청 폼 -->
-  <form class="card" id="reqForm" novalidate aria-labelledby="formTitle">
-    <h2 class="sec" id="formTitle">연아 아빠에게 메시지 남기기</h2>
-    <p class="sub">가입 없이 바로 남길 수 있어요. 2분이면 충분해요.</p>
+  <section class="block dream">
+    <p class="label">Dream</p>
+    <p class="dream-text ph">(연아가 말한 장래희망이 들어가요)</p>
+  </section>
 
-    <div class="field" id="f-name">
-      <label class="lbl" for="friend">아이(친구) 이름<span class="req" aria-hidden="true">*</span></label>
-      <input id="friend" name="friend" type="text" maxlength="30" required
-             inputmode="text" autocomplete="off" placeholder="아이 이름이나 부르는 이름을 적어주세요" />
-      <p class="err" id="e-name">아이 이름을 적어주세요.</p>
-    </div>
-
-    <fieldset class="field">
-      <legend>요청 목적<span class="req" aria-hidden="true">*</span></legend>
-      <div class="opts">
-        <span class="opt"><input type="radio" id="p1" name="purpose" value="play" checked><label for="p1">함께 놀기</label></span>
-        <span class="opt"><input type="radio" id="p2" name="purpose" value="invite"><label for="p2">초대하기</label></span>
-        <span class="opt"><input type="radio" id="p3" name="purpose" value="hello"><label for="p3">인사·기타</label></span>
-      </div>
-    </fieldset>
-
-    <div class="field" id="f-msg">
-      <label class="lbl" for="msg">전할 말<span class="req" aria-hidden="true">*</span></label>
-      <textarea id="msg" name="msg" maxlength="1000" required
-                placeholder="예) 저희 아이가 연아랑 또 놀고 싶어 해요. 괜찮으시면 한번 뵐 수 있을까요?"></textarea>
-      <p class="err" id="e-msg">전할 말을 적어주세요.</p>
-    </div>
-
-    <div class="field">
-      <label class="lbl" for="wday">희망 일정 <span class="hint" style="font-weight:400">(선택)</span></label>
-      <input id="wday" name="wday" type="date" />
-      <div class="opts" style="margin-top:8px" role="group" aria-label="희망 시간대">
-        <span class="opt"><input type="radio" id="t0" name="wtime" value="any" checked><label for="t0">상관없음</label></span>
-        <span class="opt"><input type="radio" id="t1" name="wtime" value="am"><label for="t1">오전</label></span>
-        <span class="opt"><input type="radio" id="t2" name="wtime" value="pm"><label for="t2">오후</label></span>
-        <span class="opt"><input type="radio" id="t3" name="wtime" value="eve"><label for="t3">저녁</label></span>
-      </div>
-      <p class="hint">정확한 시각·장소는 연락으로 함께 정할게요. 확정 예약은 아니에요.</p>
-    </div>
-
-    <fieldset class="field" id="f-channel">
-      <legend>회신 받을 방법<span class="req" aria-hidden="true">*</span></legend>
-      <div class="opts">
-        <span class="opt"><input type="radio" id="c1" name="channel" value="sms"><label for="c1">문자</label></span>
-        <span class="opt"><input type="radio" id="c2" name="channel" value="tel"><label for="c2">전화</label></span>
-        <span class="opt"><input type="radio" id="c3" name="channel" value="email"><label for="c3">이메일</label></span>
-      </div>
-      <p class="err" id="e-channel">회신 방법을 하나 골라주세요.</p>
-    </fieldset>
-
-    <div class="field" id="f-contact" hidden>
-      <label class="lbl" for="contact"><span id="contact-label">연락처</span><span class="req" aria-hidden="true">*</span></label>
-      <input id="contact" name="contact" type="tel" inputmode="tel" autocomplete="off" />
-      <p class="caretip">연락처 입력은 보호자와 함께 해주세요.</p>
-      <p class="err" id="e-contact">연락처를 확인해주세요.</p>
-    </div>
-
-    <div class="field">
-      <label class="lbl" for="free">연락받기 편한 시간 <span class="hint" style="font-weight:400">(선택)</span></label>
-      <input id="free" name="free" type="text" maxlength="100" placeholder="예) 평일 저녁 7시 이후" />
-    </div>
-
-    <div class="field agree" id="f-agree">
-      <input id="agree" name="agree" type="checkbox" required />
-      <label for="agree">입력하신 정보는 <b>연아 아빠에게 전달</b>되며, 연락·만남 조율 목적에만 쓰고 접수 후 90일에 자동 삭제돼요. <a href="/privacy">정보 처리 안내</a></label>
-    </div>
-    <p class="err" id="e-agree" style="margin:-8px 0 12px">동의가 필요해요.</p>
-
-    <button class="btn" type="submit">연아 아빠에게 보내기</button>
-    <p class="foot">이 페이지는 연아 명함의 QR로 연결돼요. 다른 사람의 메시지나 연락처는 보이지 않아요.</p>
-  </form>
-
-  <!-- ③ 접수 완료 (제출 성공 후 표시) -->
-  <section class="card done" id="doneCard" hidden aria-live="polite">
-    <div class="check" aria-hidden="true">✓</div>
-    <h2>연아 아빠에게 전달됐어요</h2>
-    <p>남겨주신 연락처로 확인 후 연락드릴게요.</p>
-    <p id="doneSchedule" hidden>희망 일정은 아직 확정되지 않았어요. 연락으로 함께 정할게요.</p>
+  <section class="block gallery" aria-labelledby="gt">
+    <div class="label-row"><h2 class="label" id="gt">Gallery</h2><span class="label-meta" id="count">9</span></div>
+    <ul class="gallery-grid" id="grid">
+      <li><div class="photo ph-tile"></div></li>
+      <li><div class="photo ph-tile"></div></li>
+      <li><div class="photo ph-tile"></div></li>
+      <li><div class="photo ph-tile"></div></li>
+      <li><div class="photo ph-tile"></div></li>
+      <li><div class="photo ph-tile"></div></li>
+      <li><div class="photo ph-tile"></div></li>
+      <li><div class="photo ph-tile"></div></li>
+      <li><div class="photo ph-tile"></div></li>
+      <li class="more" hidden><div class="photo ph-tile"></div></li>
+      <li class="more" hidden><div class="photo ph-tile"></div></li>
+      <li class="more" hidden><div class="photo ph-tile"></div></li>
+    </ul>
+    <button type="button" class="more-btn" id="moreBtn" aria-expanded="false" aria-controls="grid">사진 3장 더보기</button>
   </section>
 </main>
 
-<script>
-  // 회신 수단 선택 → 맞는 연락처 필드만 노출 (숨겨진 값은 제출 안 함) · design.md/CLAUDE.md
-  var channelInputs = document.querySelectorAll('input[name=channel]');
-  var fContact = document.getElementById('f-contact');
-  var contact = document.getElementById('contact');
-  var contactLabel = document.getElementById('contact-label');
-  channelInputs.forEach(function(r){
-    r.addEventListener('change', function(){
-      fContact.hidden = false;
-      if(this.value==='email'){ contact.type='email'; contact.inputMode='email'; contactLabel.textContent='이메일 주소'; }
-      else { contact.type='tel'; contact.inputMode='tel'; contactLabel.textContent= this.value==='tel' ? '전화번호' : '문자 받을 번호'; }
-      contact.value=''; // 수단 바꾸면 연락처만 초기화(본문·일정 유지)
-    });
-  });
+<!-- 토글 BGM (자동재생 아님; 오디오 파일은 자리표시자) -->
+<button type="button" class="bgm-btn" id="bgmBtn" aria-label="배경음악 켜기" aria-pressed="false">
+  <svg class="ic-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+  <svg class="ic-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M15.5 9a4.5 4.5 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></svg>
+</button>
 
-  // 간단 검증(데모) — 실제 저장/전송은 서버가 담당(PRD §6,§9)
-  function invalid(id,on){ document.getElementById(id).classList.toggle('invalid', on); }
-  document.getElementById('reqForm').addEventListener('submit', function(e){
-    e.preventDefault();
-    var ok=true, firstBad=null;
-    var name=document.getElementById('friend').value.trim();
-    var msg=document.getElementById('msg').value.trim();
-    var ch=document.querySelector('input[name=channel]:checked');
-    var ct=document.getElementById('contact').value.trim();
-    var ag=document.getElementById('agree').checked;
-    invalid('f-name',!name); if(!name){ok=false;firstBad=firstBad||'friend';}
-    invalid('f-msg',!msg); if(!msg){ok=false;firstBad=firstBad||'msg';}
-    invalid('f-channel',!ch); if(!ch){ok=false;}
-    var ctBad = !ch || !ct; invalid('f-contact',ctBad && !!ch); if(ctBad){ok=false; if(ch&&!firstBad)firstBad='contact';}
-    invalid('f-agree',!ag); document.getElementById('e-agree').style.display = ag?'none':'block';
-    if(!ag) ok=false;
-    if(!ok){ if(firstBad) document.getElementById(firstBad).focus(); return; }
-    // 성공: 저장 성공 후에만 완료 표시(데모) — 폼 숨기고 완료 카드
-    document.getElementById('reqForm').hidden=true;
-    var d=document.getElementById('doneCard'); d.hidden=false;
-    if(document.getElementById('wday').value) document.getElementById('doneSchedule').hidden=false;
-    d.scrollIntoView({behavior:'smooth'});
+<div class="cta-bar"><button type="button" class="btn btn-send" id="openSheet">연아에게 메시지 보내기</button></div>
+
+<!-- 메시지 바텀시트 (간소화: 친구 이름 · 전할 메시지 · 연락처) -->
+<dialog class="sheet" id="sheet" aria-labelledby="st">
+  <div class="sheet-grip" aria-hidden="true"></div>
+  <div class="sheet-head">
+    <div class="sheet-title">
+      <h2 id="st">To. 연아</h2>
+      <button type="button" class="info-chip" id="infoToggle" aria-label="메시지 안내 보기" aria-expanded="false" aria-controls="infoPop">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9"/><path d="M10 5.5v5.5"/><circle class="dot" cx="10" cy="14.2" r="1.1"/></svg>
+      </button>
+    </div>
+    <button type="button" class="icon-btn" id="closeSheet" aria-label="닫기"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <div class="info-pop" id="infoPop" role="dialog" aria-label="메시지 안내" hidden>
+      <dl>
+        <div><dt>전달 방법</dt><dd>문자로 연아 아빠 휴대폰에 바로 전달돼요.</dd></div>
+        <div><dt>보는 사람</dt><dd>연아 아빠만 볼 수 있어요.</dd></div>
+        <div><dt>답장</dt><dd>답장할 때 연아 아빠 번호가 보여요.</dd></div>
+      </dl>
+    </div>
+  </div>
+  <form id="form" novalidate>
+    <p class="sheet-lead">연아 아빠가 먼저 읽고, 적어주신 번호로 답장드려요.</p>
+    <div class="field" id="f-name">
+      <label for="friendName">친구 이름</label>
+      <input id="friendName" type="text" maxlength="30" autocomplete="off" placeholder="연아 친구의 이름" required />
+      <p class="error" id="e-name"></p>
+    </div>
+    <div class="field" id="f-msg">
+      <div class="field-label-row"><label for="message">전할 메시지</label><span class="counter" id="cnt">0 / 1,000</span></div>
+      <textarea id="message" maxlength="1000" placeholder="연아에게 하고 싶은 말" required></textarea>
+      <p class="error" id="e-msg"></p>
+    </div>
+    <div class="field" id="f-phone">
+      <label for="phone">답변받을 연락처</label>
+      <input id="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="010-0000-0000" required />
+      <p class="hint">휴대폰 번호만 받아요. 보호자와 함께 적어주세요.</p>
+      <p class="error" id="e-phone"></p>
+    </div>
+    <button type="submit" class="btn btn-send">연아에게 메시지 보내기</button>
+  </form>
+  <div class="sheet-done" id="done" hidden>
+    <h3>메시지를 전했어요</h3>
+    <p>남겨주신 번호로 연락드릴게요.</p>
+    <button type="button" class="btn btn-ghost" id="doneClose">닫기</button>
+  </div>
+</dialog>
+
+<script>
+  var $=function(id){return document.getElementById(id)};
+  // 갤러리 더보기
+  $('moreBtn').addEventListener('click',function(){
+    var ex=this.getAttribute('aria-expanded')==='true';
+    document.querySelectorAll('#grid .more').forEach(function(li){li.hidden=ex});
+    this.setAttribute('aria-expanded',String(!ex));
+    this.firstChild && (this.childNodes[0].nodeValue = ex?'사진 3장 더보기':'접기');
+    $('count').textContent = ex?'9':'12';
   });
+  // BGM 토글 (데모: 상태만)
+  $('bgmBtn').addEventListener('click',function(){
+    var on=this.getAttribute('aria-pressed')==='true';
+    this.setAttribute('aria-pressed',String(!on));
+    this.setAttribute('aria-label',on?'배경음악 켜기':'배경음악 끄기');
+  });
+  // 바텀시트 열고 닫기
+  var sheet=$('sheet');
+  $('openSheet').addEventListener('click',function(){
+    ['name','msg','phone'].forEach(clr);
+    $('form').hidden=false; $('done').hidden=true;
+    sheet.showModal();
+  });
+  $('closeSheet').addEventListener('click',function(){ sheet.close(); });
+  // 안내 팝
+  $('infoToggle').addEventListener('click',function(){
+    var ex=this.getAttribute('aria-expanded')==='true';
+    this.setAttribute('aria-expanded',String(!ex)); $('infoPop').hidden=ex;
+  });
+  // 글자수
+  $('message').addEventListener('input',function(){ $('cnt').textContent=this.value.length.toLocaleString()+' / 1,000'; });
+  // 검증(데모) + 완료
+  function bad(id,msg){ $('f-'+id).classList.add('invalid'); $('e-'+id).textContent=msg; }
+  function clr(id){ $('f-'+id).classList.remove('invalid'); $('e-'+id).textContent=''; }
+  $('form').addEventListener('submit',function(e){
+    e.preventDefault(); var ok=true, first=null;
+    var n=$('friendName').value.trim(), m=$('message').value.trim(), p=$('phone').value.trim();
+    clr('name');clr('msg');clr('phone');
+    if(!n){bad('name','친구 이름을 적어주세요.');ok=false;first=first||'friendName';}
+    if(!m){bad('msg','전할 메시지를 적어주세요.');ok=false;first=first||'message';}
+    if(!/\d{9,}/.test(p.replace(/\D/g,''))){bad('phone','휴대폰 번호를 확인해주세요.');ok=false;first=first||'phone';}
+    if(!ok){ $(first).focus(); return; }
+    $('form').hidden=true; $('done').hidden=false;
+  });
+  $('doneClose').addEventListener('click',function(){ sheet.close(); });
 </script>
 </body>
 </html>
