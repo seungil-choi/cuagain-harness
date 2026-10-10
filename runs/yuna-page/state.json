@@ -1,0 +1,61 @@
+{
+  "slug": "yuna-page",
+  "topic": "yuna.page 공개 화면",
+  "next": "(done)",
+  "attempts": {
+    "p1": 0,
+    "p2": 0,
+    "p3": 0
+  },
+  "awaitingReview": null,
+  "blocked": false,
+  "done": true,
+  "history": [
+    {
+      "at": "2026-10-10T03:18:45.070Z",
+      "gate": "p1",
+      "result": "pass",
+      "info": {
+        "stories": [
+          4,
+          5,
+          1,
+          2,
+          3
+        ],
+        "screens": 2
+      }
+    },
+    {
+      "at": "2026-10-10T03:18:45.126Z",
+      "event": "proceed from p1"
+    },
+    {
+      "at": "2026-10-10T03:18:45.181Z",
+      "gate": "p2",
+      "result": "pass",
+      "info": {
+        "colorTokens": 19,
+        "typeScale": 12,
+        "unlabeledInputs": 0,
+        "btnMinH": 56,
+        "inputMinH": 52,
+        "imgNoAlt": 0
+      }
+    },
+    {
+      "at": "2026-10-10T03:18:45.235Z",
+      "event": "proceed from p2"
+    },
+    {
+      "at": "2026-10-10T03:18:45.290Z",
+      "gate": "p3",
+      "result": "pass",
+      "info": {
+        "report": "verify-report.md"
+      }
+    }
+  ],
+  "createdAt": "2026-10-10T03:18:12.049Z",
+  "updatedAt": "2026-10-10T03:18:45.290Z"
+}

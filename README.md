@@ -1,31 +1,52 @@
 # CUAgain 디자인 하네스 — yuna.page
 
-> 4차 사이클 "기획부터 디자인까지 쭉! AI 디자인 하네스 만들기" · **트랙 A 산출물**
-> 작성: 2026-10-09
+> 4차 사이클 "AI 디자인 하네스 만들기" · **트랙 A 산출물**
 
-CUAgain(아이 QR 명함+페이지 서비스)의 1호 사례 **yuna.page**를 대상으로,
+CUAgain(아이 QR 명함+페이지 서비스)의 1호 사례 **yuna.page** 공개 화면을,
 `PRD → 스토리(서비스/작업) → design.md → 하네스(페이즈·게이트·에이전트) → 실제 디자인 산출물`
-까지 한 번 돌려본 결과물입니다.
+까지 **실제로 돌려** 만든 결과물입니다.
 
-## 구조
+## 이 하네스의 형태
+공식 허들링 디자인 하네스(`figmatutor2/harness`)의 **구조·스크립트·hook·state·`npm run verify`를 그대로** 채택하고,
+내용을 CUAgain/yuna.page로 교체했습니다. 원 하네스는 산출물이 **Figma**지만, yuna.page는 실제 **HTML 웹**(Cloudflare Workers)이라
+게이트 판정을 **HTML/문서 검사**로 적응시켰습니다.
+
 ```
+CLAUDE.md                      오케스트레이터 안내 (P1→P2→P3)
+.claude/
+  settings.json                저장 권한·확인 대기 hook
+  agents/                      spec-writer · designer · judge
+  skills/run-harness/SKILL.md  실행 절차
 docs/
-  story-service.md   서비스 도메인 — PRD에서 뽑은 유저스토리 5 + 어기면 안 되는 것 2
-  story-work.md      작업 도메인 — 손작업 7문장 → 산출물·멈칫·넘김
-  design.md          디자인 판단 맥락 — 색·타이포·간격·컴포넌트·접근성 규칙
+  prd.md · design.md           제품·디자인 설명
+  story-service.md             서비스 도메인 (유저스토리 + ★어기면 안 되는 것)
+  story-work.md                작업 도메인 (손작업 → 산출물·멈칫·넘김)
 harness/
-  harness.md         파이프라인 — 페이즈마다 (산출물 · 게이트 · 에이전트)
+  rules.yaml                   규칙 SSOT (게이트 판정 기준)
+  defaults.yaml                기본값
+  scripts/verify.mjs           게이트 판정 (HTML/문서 검사)
+  scripts/guard-*.mjs          hook (저장 권한·확인 대기)
+  templates/                   Phase 산출물 양식
 runs/
-  run-01-yuna-page/  하네스를 실제로 돌린 결과 (디자인 산출물 HTML + 게이트 판정)
+  yuna-page/                   실제 실행 (p1-spec · p2-design · p3-verify · state.json)
 ```
 
-## 하네스 4요소
-**페이즈 · 산출물 · 게이트 · 에이전트.** 게이트는 전부 **숫자 또는 파일 존재 여부**로 판정한다.
+## 돌려보기
+```bash
+cd harness && npm install
+node harness/scripts/verify.mjs status yuna-page        # 완료 실행 상태
+# 처음부터 다시 돌리려면:
+node harness/scripts/verify.mjs reopen yuna-page --from p1
+node harness/scripts/verify.mjs p1 yuna-page && node harness/scripts/verify.mjs proceed yuna-page
+node harness/scripts/verify.mjs p2 yuna-page && node harness/scripts/verify.mjs proceed yuna-page
+node harness/scripts/verify.mjs p3 yuna-page            # verify-report.md 생성
+```
 
-## 출처
-- PRD: `yeona-contact/PRD.md` (yuna.page v0.1, 2026-10-06)
-- 상위 기획: `Prj.29)CUAgain/docs/FRONT_기획_v0.md` (2026-10-09)
+## 산출물
+- `runs/yuna-page/p2-design/index.html` — yuna.page 공개 화면(소개+요청+완료) · 미리보기 `preview-*.jpg`
+- `runs/yuna-page/p3-verify/verify-report.md` — 게이트 판정 결과(전부 통과)
 
-## 지식재산 주의
-CUAgain의 "수락 후 연결·안심번호 중계" 흐름은 **출원 전 외부 공개·시연 금지**(공지예외 기한 2027-10-05).
-이 저장소와 산출물은 **공개된 yuna.page 수준(메시지 전달)까지만** 다루며, 중계/수락 연결 설계는 포함하지 않는다.
+## 범위 / 주의
+- **공개 화면까지.** 관리자 요청함·상세(US-4·US-5)는 run-02.
+- CUAgain의 "수락 후 연결·안심번호 중계"는 특허 출원 전이라 **범위에서 제외**(공지예외 2027-10-05). 공개 yuna.page 수준(메시지 전달)까지만.
+- 산출물의 연아 실제 사진·소개·장래희망은 공개 저장소라 **자리표시자**.

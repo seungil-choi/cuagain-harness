@@ -1,22 +1,51 @@
-# CLAUDE.md — CUAgain 디자인 하네스 운영 규칙
+# CUAgain 디자인 하네스 (yuna.page)
 
-이 저장소는 **yuna.page 화면을 설계할 때 AI가 따르는 하네스**다. 새 화면을 만들거나 고칠 때 아래를 따른다.
+이 폴더는 yuna.page 공개 화면을 **P1 화면 스펙 → P2 디자인(HTML) → P3 검증 리포트** 순서로 만드는 하네스입니다.
 
-## 1. 항상 지킬 것 — 서비스 게이트 (`docs/story-service.md` ★)
-- **★1** 제출된 메시지·연락처는 **관리자(연아 아빠)에게만.** 공개 페이지·공개 API에 타인의 요청/연락처를 노출하지 않는다.
-- **★2** 아동 민감정보(학교·학급·생일·집 주소)는 **수집·노출 금지.** 공개 사진의 위치 메타데이터는 게시 전 제거한다.
+> 공식 허들링 디자인 하네스(`figmatutor2/harness`)의 **구조·스크립트·hook·state·`npm run verify`를 그대로** 따르되,
+> 이 프로젝트의 산출물은 Figma가 아니라 **HTML**(yuna.page는 Cloudflare Workers로 띄우는 실제 웹)이라,
+> 게이트 판정을 Figma 대조에서 **HTML/문서 검사**로 바꿨습니다. (Figma 전면 실행은 Figma 파일·쓰기 MCP가 없어 불가)
 
-## 2. 디자인 판단 (`docs/design.md`)
-- 모바일 우선 **360px**에서 가로 스크롤 0, 터치 타깃 **44px+**, **모든 입력에 라벨**, **색만으로 상태 전달 금지**, 이미지가 실패해도 폼은 작동.
+## 자연어 요청 라우팅
+"yuna.page 하네스 돌려줘 / 디자인 시작해줘 / 이어서 해줘 / 상태 알려줘" → `run-harness` 스킬 절차대로 진행합니다.
 
-## 3. 작업 방식
-- AI에게 한 번에 지시하지 말고 **라운드로 질문받아** 진행한다 (`docs/story-work.md`의 멈칫·넘김을 경계로 삼는다).
-- 각 페이즈 끝에서 **게이트를 숫자/파일로 센다** (`harness/harness.md`).
-- **PRD에 없는 내용은 지어내지 말고** 미결정으로 남긴다 (PRD §11 미결정 사항).
+## 파일 역할
+| 파일 | 역할 | 수정 |
+|---|---|---|
+| `docs/story-service.md` | 무엇을 위한 일인지 (유저스토리 US-1~5, ★ 어기면 안 되는 것) | 사람 |
+| `docs/story-work.md` | 실제로 어떻게 하는지 (①~⑧ 작업 흐름) | 사람 |
+| `docs/prd.md`, `docs/design.md` | 제품·디자인 설명 문서 | 사람 |
+| `harness/rules.yaml` | **규칙 SSOT** — 게이트 판정 기준 | 사람 |
+| `harness/defaults.yaml` | 정하지 않은 값의 기본값 (`source: 임의` = 확인 대상) | 사람 |
+| `harness/scripts/verify.mjs` | 게이트 판정 스크립트 | — |
+| `harness/scripts/guard-write.mjs` | 현재 게이트 폴더에만 저장하도록 강제(hook) | — |
+| `harness/scripts/guard-review.mjs` | 확인 대기 중 작업 에이전트 호출 차단(hook) | — |
+| `harness/scripts/save-blocks.mjs` | 큰 반환 블록을 경로 검사 후 저장 | — |
+| `harness/templates/` | Phase 산출물 양식 | — |
+| `runs/<slug>/state.json` | 진행 상태 (재개 기준) | **스크립트만** |
+| `runs/<slug>/p3-verify/verify-report.md` | 최종 검증 리포트 | **스크립트만** |
 
-## 4. 파일 지도
-- 서비스가 뭔지 → `docs/story-service.md`
-- 내가 일하는 순서 → `docs/story-work.md`
-- 어떻게 생겨야 하는지 → `docs/design.md`
-- 어떤 순서로 만들고 어디서 멈춰 검사하는지 → `harness/harness.md`
-- 실제로 돌린 결과 → `runs/`
+## 에이전트와 편집 폴더
+작업 에이전트는 파일을 직접 쓰지 않고 `=== FILE: … ===` 블록으로 반환하고, 오케스트레이터가 해당 게이트 폴더에만 저장합니다.
+
+| 에이전트 | Phase | 저장 위치 |
+|---|---|---|
+| `spec-writer` | P1 | `runs/<slug>/p1-spec/` |
+| `designer` | P2 | `runs/<slug>/p2-design/` |
+| `judge` | 모든 게이트 | 없음 (읽기 + `verify.mjs` 실행·판정만) |
+
+## 명령
+```bash
+cd harness && npm install          # 처음 1회 (yaml 패키지)
+node harness/scripts/verify.mjs init <slug> --topic "<주제>"
+node harness/scripts/verify.mjs <p1|p2|p3> <slug>
+node harness/scripts/verify.mjs proceed <slug>              # P1·P2 산출물 확인 후 진행 지시 시
+node harness/scripts/verify.mjs status  <slug>
+node harness/scripts/verify.mjs reopen  <slug> --from <gate>
+node harness/scripts/verify.mjs unblock <slug>              # 3회 실패 차단 해제
+```
+
+## 참고
+- 저장 권한은 `.claude/settings.json` hook으로 강제됩니다 (guard-write: `runs/` 안은 현재 게이트 폴더만 · `state.json`/`verify-report.md`는 스크립트만 / guard-review: 확인 대기 중 작업 에이전트 차단).
+- 게이트는 전부 **숫자/파일 존재 여부**로 판정합니다 (`rules.yaml` SSOT). 문서의 수치를 바꾸면 `rules.yaml`도 함께 고칩니다.
+- **완성 실행 예시**: `runs/yuna-page/` (P1·P2·P3 전부 통과, `p3-verify/verify-report.md` 참조).

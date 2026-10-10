@@ -1,0 +1,60 @@
+# CUAgain 디자인 하네스 — 규칙 SSOT (yuna.page)
+# 검증 스크립트(harness/scripts/verify.mjs)는 이 파일만 기준으로 판정한다.
+# design.md / story-service.md 는 사람이 읽는 설명 문서이며, 수치를 바꾸면 이 파일도 함께 고친다.
+#
+# ※ 공식 허들링 하네스(figmatutor2/harness)의 구조·스크립트·hook·state·npm verify를 그대로 따르되,
+#   산출물이 Figma가 아니라 "HTML"이라 게이트를 HTML/문서 검사로 바꿨다.
+#   (Figma 전면 실행(A)은 Figma 파일·쓰기 MCP가 없어 불가 → HTML 적응본 B)
+
+version: 1
+
+run:
+  runs_dir: runs
+  max_attempts: 3 # 같은 게이트 연속 실패 한도 → 도달 시 blocked, 사람에게 보고
+  placeholder_pattern: "\\{\\{[^}]*\\}\\}" # 템플릿 미작성 표시. 남아 있으면 실패
+
+# 게이트 순서와 실패 시 복귀 경로
+gates:
+  order: [p1, p2, p3]
+  return_to:
+    p1: p1
+    p2: p2
+    p3: p3
+  # 통과 뒤 사용자 확인을 받아야 다음으로 가는 게이트 (story-work ② "무엇을 반영할지 사람이 판단")
+  review_after: [p1, p2]
+
+# ─────────────────────────────────────────────
+# P1 — 화면 스펙: story-service(유저스토리) + PRD 에서 공개 화면을 정의
+# ─────────────────────────────────────────────
+p1:
+  dir: p1-spec
+  files: [screen-spec.md]
+  required_sections: [목적, 연결 유저스토리, 화면 목록, 상태]
+  story_id_pattern: "\\bUS-(\\d+)\\b"
+  story_id_range: [1, 5] # docs/story-service.md 유저스토리 번호
+  screen_row_pattern: "^\\|\\s*S(\\d+)\\s*\\|"
+  min_screens: 2 # 소개+요청 / 접수 완료 이상
+
+# ─────────────────────────────────────────────
+# P2 — 디자인 산출물(HTML): docs/design.md 규칙 적용
+# ─────────────────────────────────────────────
+p2:
+  dir: p2-design
+  files: [index.html]
+  min_color_tokens: 7 # :root 의 --토큰 수 (design.md §1)
+  min_type_scale: 6 # 서로 다른 font-size 수 (design.md §2)
+  require_labeled_inputs: true # 모든 text/tel/email/textarea 에 연결된 label (design.md §6)
+  min_touch_target_px: 44 # 주 버튼·입력 min-height (design.md §3)
+  forbid_audio_autoplay: true # 배경음악 자동재생 금지 — 토글만 (design.md §0)
+  require_img_alt: true # <img> 에 alt
+  # ★2 어기면 안 되는 것 — 아동 민감정보 입력 금지 (라벨에 아래 단어가 붙은 입력이 있으면 실패)
+  forbid_field_labels: [학교, 학급, 생일, 주소]
+
+# ─────────────────────────────────────────────
+# P3 — 검증 리포트 (스크립트만 씀)
+# ─────────────────────────────────────────────
+p3:
+  dir: p3-verify
+  report_file: verify-report.md
+  require_story_coverage: [1, 2, 3] # 공개 화면 범위에서 커버해야 할 US (US-4·5 = 관리자, run-02)
+  # ★1 (공개 화면에 타인 요청/연락처 노출 0)은 정적 단일 화면이라 구조적으로 보장 → 리포트에 기록

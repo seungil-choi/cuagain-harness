@@ -1,0 +1,39 @@
+# CUAgain 디자인 하네스 — 기본값 (yuna.page)
+# 사용자가 따로 정하지 않았을 때 에이전트가 쓰는 값. 게이트가 검사하는 수치는 여기 없고 rules.yaml(SSOT)에 있다.
+#
+# source 표시
+#   design.md = docs/design.md 에 적힌 값
+#   prd       = docs/prd.md / 원본 PRD 에 적힌 값
+#   임의      = 문서에 없어서 하네스가 정한 값 ← 사용자가 확인·수정할 대상
+
+page:
+  max_width: { value: 520, source: design.md } # px
+  mobile_min: { value: 360, source: design.md } # 360px 가로 스크롤 0
+  locale: { value: ko-KR, source: prd }
+
+type:
+  body_font: { value: "Pretendard Variable", source: design.md }
+  hand_font: { value: "Nanum Pen Script (handwriting.svg 대체)", source: design.md } # 실제는 획 애니메이션 SVG
+  base_size: { value: 16, source: design.md }
+
+color:
+  paper: { value: "#f7f4f1", source: design.md }
+  ink: { value: "#1d1b20", source: design.md }
+  signature_gradient: { value: "#e2a3b8 → #9cc6e2", source: design.md } # 얇은 선·포인트에만
+  state_rule: { value: "색만으로 상태 전달 금지 (아이콘+문구 병기)", source: design.md }
+
+gallery:
+  first_shown: { value: 9, source: prd } # 나머지는 '더보기'
+  more_label: { value: "사진 N장 더보기", source: 임의 }
+
+bgm:
+  autoplay: { value: false, source: design.md } # 우상단 토글만
+  file: { value: "/bgm.m4a (산출물에서는 자리표시자)", source: 임의 }
+
+form:
+  fields: { value: "친구 이름 · 전할 메시지 · 답변받을 연락처", source: prd } # 덜어내기 결과(3필드)
+  consent_checkbox: { value: false, source: 임의 } # 동의 체크박스 대신 ⓘ 안내(전달/보는사람/답장)
+  reply_channel: { value: "휴대폰(문자)", source: prd }
+
+content:
+  child_data: { value: "사진·소개·장래희망은 산출물에서 자리표시자(아동 개인정보)", source: prd } # ★2
