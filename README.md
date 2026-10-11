@@ -46,14 +46,6 @@ node harness/scripts/verify.mjs p3 yuna-page            # verify-report.md 생�
 - `runs/yuna-page/p2-design/index.html` — yuna.page 공개 화면(소개+요청+완료) · 미리보기 `preview-*.jpg`
 - `runs/yuna-page/p3-verify/verify-report.md` — 게이트 판정 결과(전부 통과)
 
-## Figma 런 (시각 산출물)
-하네스의 페이즈·게이트를 Figma 디자인(MCP)에서 실제로 적용한 런 → `runs/yuna-page-figma/`
-- `wireframes.png` — 흑백 와이어프레임 8프레임 (소개 · 문의 폼 상태변형 4종 · 갤러리 더보기 · 사진 상세 · 컴포넌트 변형)
-- `color-intro.png` · `color-form.png` — 컬러 시안 (소개 화면 · 문의 폼)
-- `RUN.md` — 적용한 게이트(아동 비식별 · 비공개 안내 · 필드 최소화 …)와 페이즈 흐름
-
-> 자동 게이트 판정은 HTML 런(`runs/yuna-page`, `npm run verify`), **시각 산출물은 이 Figma 런**이 담당.
-
 ## 범위 / 주의
 - **공개 화면까지.** 관리자 요청함·상세(US-4·US-5)는 run-02.
 - CUAgain의 "수락 후 연결·안심번호 중계"는 특허 출원 전이라 **범위에서 제외**(공지예외 2027-10-05). 공개 yuna.page 수준(메시지 전달)까지만.
